@@ -1,77 +1,39 @@
 {
-  "employees": [
-    {
-      "empId": 123,
-      "empDept": "IT",
-      "empName": "Shweta"
-    },
-    {
-      "empId": 888,
-      "empDept": "HR",
-      "empName": "Amit"
-    },
-    {
-      "empId": 102,
-      "empDept": "Support",
-      "empName": "Sunil"
-    },
-    {
-      "empId": 524,
-      "empDept": "Sales",
-      "empName": "Anita"
-    },
+  "posts": [
     {
       "id": 1,
-      "empDept": "TEMP",
-      "empName": "Tina"
+      "title": "json-server",
+      "author": "typicode"
     },
     {
-      "empId": 101,
-      "empDept": "TEMP",
-      "empName": "Tina",
-      "id": 2
+      "id": 866,
+      "title": "producer_money_engineer.mbox",
+      "author": "Ian West"
     },
     {
-      "empId": 103,
-      "empDept": "Market",
-      "empName": "Neha",
-      "id": 3
+      "id": 215,
+      "title": "bennie",
+      "author": "Bruce Cronin"
     },
     {
-      "empId": 677,
-      "empDept": "Market",
-      "empName": "Neha",
-      "id": 4
+      "id": 570,
+      "title": "cheyenne",
+      "author": "Freda Krajcik"
     },
     {
-      "empId": 299,
-      "empDept": "Books",
-      "empName": "Marietta",
-      "id": 5
-    },
-    {
-      "empId": 988,
-      "empDept": "Baby",
-      "empName": "Randal",
-      "id": 6
-    },
-    {
-      "empId": 808,
-      "empDept": "Outdoors",
-      "empName": "Zaria",
-      "id": 7
-    },
-    {
-      "empId": 847,
-      "empDept": "Jewelery",
-      "empName": "Liana",
-      "id": 8
-    },
-    {
-      "empId": 369,
-      "empDept": "Electronics",
-      "empName": "Jose",
-      "id": 9
+      "id": 983,
+      "title": "{{title}}",
+      "author": "{{author}}"
     }
-  ]
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
 }
