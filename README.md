@@ -13,6 +13,15 @@ This is a basic postman tutorial which could help understand the use of postman 
 - [Pre-request Script](#pre_request_script)
 - [Tests](#tests)
 - [Validating Schema](#validating_schema)
+- [Mock Server using Json Server](#mock_server_using_json_server)
+- [API Requests with Mock Server](#api_requests_with_mock_server)
+- [End to End Test Execution](#end_to_end_test_execution)
+- [Reading Data From CSV File](#reading_data_from_csv_file)
+- [Execute Collection via CLI](#execute_collection_via_cli)
+- [htmlextra for Better Report](#htmlextra_for_better_report)
+- [Documentation](#documentation)
+- [About Me](#about_me)
+- [Support](#support)
 ## 🚀 Postman Setup
 * Download Postman from [here](https://www.postman.com/downloads/)
 * Sign in, install and open the Postman
@@ -290,3 +299,284 @@ pm.test('Schema is valid', function () {
 
     ![Tests Running](https://github.com/swatinerkar/postman/blob/main/images/21.%20Test_Success.png)
 
+
+## Mock Server using Json Server
+
+- Sometimes you need to test an API but the server isn't ready yet and you can't wait till it will be available. 
+- In such situations we can use Mock Server.
+- It is a replica of actual server, not a real server. It is only for testing purpose.
+- We can create such a server with help of [json-server](https://medium.com/@devmrin/create-a-rest-api-json-server-in-less-than-1-minute-acf286600f03)
+
+#### Pre-requisites
+- You need to have nodeJs installed on your machine
+
+- Now follow the steps mentioned on webite.
+
+- **Some tips**
+    - Make sure while creating json file you include 'id' field. (It was giving error when I tried.)
+    - Here is a sample file
+
+    ![JSON file](https://github.com/swatinerkar/postman/blob/main/images/22.%20JsonFile.png)
+
+    - Go to the location where your json file is present and option command prompt there, you won't need to pass entire file path while starting ther server.
+    - Giving port is optional, if you don't specify the port the server will start on port 3000
+
+    ![JSON server start](https://github.com/swatinerkar/postman/blob/main/images/23.%20JsonServer_Start.png)
+
+- Once the server started, you can use the URL shown - http://localhost:3000
+
+    ![JSON server URL](https://github.com/swatinerkar/postman/blob/main/images/24.%20Mock%20Server%20URL.png)
+
+
+## API Requests with Mock Server
+- Create a new Collection.
+- Add new GET request
+- You can see Resources on your local host. For me it is http://localhost:3000/
+- Obervse that for each Json object in Json file, it has created end point
+- For instance here, /posts
+- Add all requests with supportive http methods for one of your endpoint. Here I have created GET, POST, PUT, DETELE for /ports
+
+
+## End to End Test Execution
+
+### GET Method
+
+``` http://localhost:3000/posts ```
+- Above returns list of all posts
+- I have added Test to validate status code
+
+``` 
+    pm.test("Status code is 200", function () {
+        pm.response.to.have.status(200);
+    });
+```
+
+    ![GET request](https://github.com/swatinerkar/postman/blob/main/images/25.%20Hit%20Get%20Request%20-%20Mock%20server.png)
+
+### POST Method
+
+``` http://localhost:3000/posts ```
+
+- For POST call, we need to pass body and in body I have used the functions, provided by postman to generate random values. You need to type {{$<press ctrl+space>}}. It will give all possible values.
+- I have added Test to assert the status code
+
+``` 
+    pm.test("Successful POST request", function () {
+    pm.expect(pm.response.code).to.be.oneOf([201, 202]);
+    }); 
+```
+
+    ![POST request random](https://github.com/swatinerkar/postman/blob/main/images/26.%20Post%20call%20Body%20with%20random%20functions.png)
+
+
+    ![POST request](https://github.com/swatinerkar/postman/blob/main/images/27.%20Post%20call.png)
+
+
+- I want to save the newly created records Id, which I can use later in other API calls. To do so I have saved the Id from response to collection variable.
+
+```
+    // Need to save the created id in collection variable
+    pm.collectionVariables.set("id", pm.response.json().id);
+
+```
+
+- Send the reqeust. Go to collection variable and you can see the variable with value is been present.
+
+    ![after POST request](https://github.com/swatinerkar/postman/blob/main/images/28.%20Collection%20variable%20after%20post%20call.png)
+
+### GET Method
+``` 
+    http://localhost:3000/posts/<pathParam - id> 
+```
+
+- It is the similar call, but we are passing the id which we have stored as collection varible to get that specific id's record.
+
+    ![GET call](https://github.com/swatinerkar/postman/blob/main/images/29.%20Get%20only%20specific%20post.png)
+
+
+### PUT Method
+
+```
+http://localhost:3000/posts/<pathParam - id> 
+```
+
+- Pass id as pathparam, to tell that this perticular post we want to update.
+- What need to be update that we need to send in body.
+- In my case, I passed same Id (collection variable). Keeping id same and updating other 2 values.
+
+```
+    {
+    "id": {{id}},
+    "title": "{{$randomDomainWord}}",
+    "author": "{{$randomFullName}}"
+    }
+```
+    ![PUT call](https://github.com/swatinerkar/postman/blob/main/images/30.%20Put%20call.png)
+
+### DELETE Method
+
+``` http://localhost:3000/posts/<pathParam - id> ```
+
+- Deleting the same post which is created by POST call.
+
+    ![DELETE call](https://github.com/swatinerkar/postman/blob/main/images/31.%20Delete.png)
+
+
+### GET Method
+
+``` http://localhost:3000/posts/<pathParam - id> ```
+
+- Try to fetch deleted record. To verify the data is deleted.
+
+    ![GET call Agaim](https://github.com/swatinerkar/postman/blob/main/images/32.%20Get%20deleted%20record.png)
+
+### Collection Execution
+
+- You can run this End to End Test scenarios via Collection
+
+    ![GET call Agaim](https://github.com/swatinerkar/postman/blob/main/images/33.%20Collection%20Run%20option.png)
+
+- You can arrange the execution sequence. 
+- Add deplay between 2 calls.
+- You can schedule this execution.
+- For now I am selecting run manually. 
+- Click Run '<collection_name>'
+
+    ![Collection param](https://github.com/swatinerkar/postman/blob/main/images/34.%20Run%20Collection%20parameters.png)
+
+
+    ![collection execution](https://github.com/swatinerkar/postman/blob/main/images/35.%20Collection%20Execution.png)
+## Reading Data From CSV File
+- Prepare csv file with test data which you want to pass in execution.
+- Make sure - copy the column name and use wherever you want to parameterize that value of that column.
+
+    ![Data file](https://github.com/swatinerkar/postman/blob/main/images/36.%20Data%20File.png)
+
+
+    ![column name](https://github.com/swatinerkar/postman/blob/main/images/37.%20Put%20call%20-%20updated%20same%20as%20column%20name.png)
+
+- Go to Colletion -> Run Collection
+- Click Select
+- Select the csv file
+
+    ![select file](https://github.com/swatinerkar/postman/blob/main/images/38.%20Select%20File.png)
+
+- You can preview the data of csv file which you have selected.
+
+    ![file data](https://github.com/swatinerkar/postman/blob/main/images/39.%20Preview%20file%20data.png)
+
+- Run 
+- Observe the save test scenario execution 3 times as we have passed 3 sets of data
+
+    ![collection test execution sets](https://github.com/swatinerkar/postman/blob/main/images/40.%20Execution%20-%203%20test%20sets.png)
+## Execute Collection via CLI
+- To Run collectio via CLI we need to install newman
+    ``` npm install -g newman ```
+- to run collection 
+ 
+        1. Go to Collection -> 3 dots -> share -> via API (it might ask to generate token, generate it)
+        2. Copy the link
+        3. open cmd where the testData.csv file is present
+        4. Run command	
+``` 
+        newman run <copies link from collection> -d <testData.csv> 
+```
+            In my case it was 
+        
+            newman run https://api.postman.com/collections/15056817-12b7d377-3912-43ad-887b-cefbfaa668db?access_key=PMAT-01HJVJ343V96N3JSFRNBK84PS2 -d testData_Postman.csv
+	
+        5. Observe all APIs are executed and the number of iternations are the number of date provided in .csv file.
+
+    ![CLI execution](https://github.com/swatinerkar/postman/blob/main/images/41.%20Execution%20via%20CLI.png)
+
+For reference: https://www.npmjs.com/package/newman
+## htmlextra for Better Report
+- To get better html report, we need to install htmlextra
+- Install it by 
+    ``` npm install -g newman-reporter-htmlextra ```
+- Now open cmd run 
+
+    ```
+    newman run <copies link from collection> -d <testData.csv> -r htmlextra
+    ```
+     For me it is
+
+    ```newman run https://api.postman.com/collections/15056817-12b7d377-3912-43ad-887b-cefbfaa668db?access_key=PMAT-01HJVJ343V96N3JSFRNBK84PS2 -d testData_Postman.csv -r htmlextra ```
+
+- It might not show anything on command prompt.
+- Go to the same path where you have executed this command.
+- newman folder has been generated there.
+- When you open it, there will a html file.
+- Open the html file. Its a report.
+
+    ![htmlextra](https://github.com/swatinerkar/postman/blob/main/images/42.%20htmlextra%20report.png)
+
+
+
+
+
+For Reference: https://www.npmjs.com/package/newman-reporter-htmlextra
+## 📂 Documentation
+
+- You can add description about collection and each reqeust, to document about it.
+
+#### Collection Document
+- To add details about collection, simply click on collection and you will see overview tab. There you can add details.
+
+    ![collection document](https://github.com/swatinerkar/postman/blob/main/images/43.%20Collection%20Desciption.png)
+
+#### Request Document
+- For Request, open the reqeust and on right side bar, you will find Document icon. Click on that and you will get field to add desciption about Request
+
+    ![request document](https://github.com/swatinerkar/postman/blob/main/images/44.%20Request%20Description.png)
+
+#### Add Example
+- You can add example for references.
+- Send the request of an API.
+- Copy the response.
+- For the same API, click on 3 dots on the Request -> Add Example
+- Under Example, you need to paste the copied response.
+- Also select expected status code.
+- Save it.
+- Add such examples for all Requests.
+
+    ![Example Option](https://github.com/swatinerkar/postman/blob/main/images/45.%20Add%20Example%20option.png)
+
+    ![Example](https://github.com/swatinerkar/postman/blob/main/images/46.%20Example.png)
+
+#### Collection Documentation
+- Go to Collection 3 dots -> scroll down -> View documentation
+- Notice you can seee the complete documentation along with examples.
+
+    ![View Documentation](https://github.com/swatinerkar/postman/blob/main/images/47.%20View%20Documentation.png)
+
+#### Publish the Documentation
+- You can see the publish option on right top corner, click on it.
+- We will navigate to web postman where you can configure and customise your documentation page.
+
+    ![Configure Publish](https://github.com/swatinerkar/postman/blob/main/images/48.%20webPostman_ConfigureBeforePublish.png)
+
+- Select details as per your requirment and choice. I kept as it is.
+- Click Publish
+
+    ![Publish Documentation URL](https://github.com/swatinerkar/postman/blob/main/images/49.%20url%20Ffor%20published%20documentation.png)
+
+- Open the published document URL
+- This is published documentation and can be shared with anyone. 
+
+    ![publish Documentation](https://github.com/swatinerkar/postman/blob/main/images/50.%20published%20documentation.png)
+
+
+
+
+## 🌐 About Me
+I'm a Software Automation Tester, having 11+ years of experience.
+
+Please have a look on my Portfolio: [@swatinerkar](https://swatinerkar.wordpress.com/)
+
+My LinkedIn Profile: [@swatinerkar](https://www.linkedin.com/in/swatinerkar/)
+
+If you would like to have some guidence, you can book any of my service: [@swatinerkar](https://topmate.io/swati_nerkar)
+## 👯 Support
+
+For support, email swatinerkar.mentorship@gmail.com
