@@ -1,0 +1,77 @@
+{
+  "employees": [
+    {
+      "empId": 123,
+      "empDept": "IT",
+      "empName": "Shweta"
+    },
+    {
+      "empId": 888,
+      "empDept": "HR",
+      "empName": "Amit"
+    },
+    {
+      "empId": 102,
+      "empDept": "Support",
+      "empName": "Sunil"
+    },
+    {
+      "empId": 524,
+      "empDept": "Sales",
+      "empName": "Anita"
+    },
+    {
+      "id": 1,
+      "empDept": "TEMP",
+      "empName": "Tina"
+    },
+    {
+      "empId": 101,
+      "empDept": "TEMP",
+      "empName": "Tina",
+      "id": 2
+    },
+    {
+      "empId": 103,
+      "empDept": "Market",
+      "empName": "Neha",
+      "id": 3
+    },
+    {
+      "empId": 677,
+      "empDept": "Market",
+      "empName": "Neha",
+      "id": 4
+    },
+    {
+      "empId": 299,
+      "empDept": "Books",
+      "empName": "Marietta",
+      "id": 5
+    },
+    {
+      "empId": 988,
+      "empDept": "Baby",
+      "empName": "Randal",
+      "id": 6
+    },
+    {
+      "empId": 808,
+      "empDept": "Outdoors",
+      "empName": "Zaria",
+      "id": 7
+    },
+    {
+      "empId": 847,
+      "empDept": "Jewelery",
+      "empName": "Liana",
+      "id": 8
+    },
+    {
+      "empId": 369,
+      "empDept": "Electronics",
+      "empName": "Jose",
+      "id": 9
+    }
+  ]
+}
