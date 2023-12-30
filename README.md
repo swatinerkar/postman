@@ -483,7 +483,7 @@ http://localhost:3000/posts/<pathParam - id>
 ```
             In my case it was 
         
-            newman run https://api.postman.com/collections/15056817-12b7d377-3912-43ad-887b-cefbfaa668db?access_key=PMAT-01HJVJ343V96N3JSFRNBK84PS2 -d testData_Postman.csv
+            newman run https://api.postman.com/collections/15056817-12b7d377-3912-43ad-887b-cefbfaa668db?access_key=<token> -d testData_Postman.csv
 	
         5. Observe all APIs are executed and the number of iternations are the number of date provided in .csv file.
 
@@ -501,7 +501,7 @@ For reference: https://www.npmjs.com/package/newman
     ```
      For me it is
 
-    ```newman run https://api.postman.com/collections/15056817-12b7d377-3912-43ad-887b-cefbfaa668db?access_key=PMAT-01HJVJ343V96N3JSFRNBK84PS2 -d testData_Postman.csv -r htmlextra ```
+    ```newman run https://api.postman.com/collections/15056817-12b7d377-3912-43ad-887b-cefbfaa668db?access_key=<token> -d testData_Postman.csv -r htmlextra ```
 
 - It might not show anything on command prompt.
 - Go to the same path where you have executed this command.
